@@ -809,8 +809,8 @@ GameObject:
   - component: {fileID: 1545385247}
   - component: {fileID: 1545385246}
   - component: {fileID: 1545385250}
-  - component: {fileID: 1545385249}
   - component: {fileID: 1545385251}
+  - component: {fileID: 1545385252}
   m_Layer: 7
   m_Name: character1
   m_TagString: Player
@@ -933,23 +933,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1545385249
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1545385244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e774f22d3f694b34dae3a9b026056609, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  validInputs: 610000006400000077000000
-  speedX: 0.02
-  jumpForce: 3
-  groundCheck: {fileID: 1545385251}
-  inputController: {fileID: 1941643551}
 --- !u!95 &1545385250
 Animator:
   serializedVersion: 4
@@ -986,6 +969,23 @@ MonoBehaviour:
   layer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &1545385252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1545385244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e774f22d3f694b34dae3a9b026056609, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  validInputs: 6100000064000000770000007400000079000000
+  speedX: 0.1
+  jumpForce: 3
+  groundCheck: {fileID: 1545385251}
+  inputController: {fileID: 0}
 --- !u!1 &1546615263
 GameObject:
   m_ObjectHideFlags: 0
@@ -999,10 +999,10 @@ GameObject:
   - component: {fileID: 1546615269}
   - component: {fileID: 1546615268}
   - component: {fileID: 1546615267}
-  - component: {fileID: 1546615266}
   - component: {fileID: 1546615265}
+  - component: {fileID: 1546615271}
   m_Layer: 7
-  m_Name: character1 (1)
+  m_Name: character2
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1040,23 +1040,6 @@ MonoBehaviour:
   layer:
     serializedVersion: 2
     m_Bits: 64
---- !u!114 &1546615266
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1546615263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e774f22d3f694b34dae3a9b026056609, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  validInputs: 140100001301000011010000
-  speedX: 0.02
-  jumpForce: 3
-  groundCheck: {fileID: 1546615265}
-  inputController: {fileID: 1941643551}
 --- !u!95 &1546615267
 Animator:
   serializedVersion: 4
@@ -1176,6 +1159,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1546615271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1546615263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e774f22d3f694b34dae3a9b026056609, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  validInputs: 1401000013010000110100006e0000006d000000
+  speedX: 0.1
+  jumpForce: 3
+  groundCheck: {fileID: 1546615265}
+  inputController: {fileID: 0}
 --- !u!1 &1577611492
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController1 : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public List<KeyCode> validInputs;
     public float speedX;
@@ -13,8 +13,6 @@ public class PlayerController1 : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
     [SerializeField] private GroundCheck groundCheck;
-
-    [SerializeField] private NewBehaviourScript inputController;
 
     private void MoveHorizontal()
     {
@@ -37,35 +35,40 @@ public class PlayerController1 : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    // TODO InputController
+    //TODO InputController
     void FixedUpdate()
     {
         #region MoveHorizontal
-        if ((inputController.inputs.ContainsKey(KeyCode.LeftArrow) || inputController.inputs.ContainsKey(KeyCode.A)) &&
-            (validInputs.Contains(KeyCode.LeftArrow) || validInputs.Contains(KeyCode.LeftArrow)))
+        if (rb.name == "character2")
         {
-            if (faceRight)
+            if (Input.GetKey(KeyCode.LeftArrow))
             {
-                Reflect();
+                if (faceRight)
+                    Reflect();
+                MoveHorizontal();
             }
-            MoveHorizontal();
-        }
-        if ((inputController.inputs.ContainsKey(KeyCode.RightArrow) || inputController.inputs.ContainsKey(KeyCode.D)) &&
-            (validInputs.Contains(KeyCode.RightArrow) || validInputs.Contains(KeyCode.D)))
-        {
-            if (faceRight)
+            if (Input.GetKey(KeyCode.RightArrow))
             {
-                Reflect();
+                if (!faceRight)
+                    Reflect();
+                MoveHorizontal();
             }
-            MoveHorizontal();
         }
-        if ((inputController.inputs.ContainsKey(KeyCode.UpArrow) || inputController.inputs.ContainsKey(KeyCode.W)) &&
-            (validInputs.Contains(KeyCode.UpArrow) || validInputs.Contains(KeyCode.W)))
+        else if (rb.name == "character1")
         {
-            Jump();
+            if (Input.GetKey(KeyCode.A))
+            {
+                if (faceRight)
+                    Reflect();
+                MoveHorizontal();
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                if (!faceRight)
+                    Reflect();
+                MoveHorizontal();
+            }
         }
-
-        Debug.Log(groundCheck.OnGround);
 
         //anim.SetBool("IsWalk", stateHorizontal != 0 && groundCheck.OnGround ? true : false);
         #endregion MoveHorizontal
@@ -73,14 +76,29 @@ public class PlayerController1 : MonoBehaviour
 
     void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.W) && groundCheck.OnGround)
-        // {
-        //     Debug.Log("InJ");
-        //     Jump();
-        //     groundCheck.OnGround = false;
+        if (rb.name == "character2")
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow) && groundCheck.OnGround)
+            {
+                Debug.Log("InJ");
+                Jump();
+                groundCheck.OnGround = false;
 
-        //     // anim.SetBool("IsJump", true);
-        // }
+                anim.SetBool("IsJump", true);
+            }
+        }
+        else if (rb.name == "character1")
+        {
+            if (Input.GetKeyDown(KeyCode.W) && groundCheck.OnGround)
+            {
+                Debug.Log("InJ");
+                Jump();
+                groundCheck.OnGround = false;
+
+                anim.SetBool("IsJump", true);
+            }
+        }
+
         // else if (!Input.GetKeyDown(KeyCode.W) && !groundCheck.OnGround)
         // {
         //     anim.SetBool("IsJump", true);
