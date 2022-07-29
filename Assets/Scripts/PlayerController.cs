@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
     [SerializeField] private GroundCheck groundCheck;
+    [SerializeField] private WeaponController weaponController;
 
     private void MoveHorizontal()
     {
@@ -36,8 +37,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void FixedUpdate()
-    {   
-        Debug.Log(groundCheck.OnGround);
+    {
         #region MoveHorizontal
         if (rb.name == "character2")
         {
@@ -57,7 +57,6 @@ public class PlayerController : MonoBehaviour
 
                 anim.SetBool("IsWalk", groundCheck.OnGround ? true : false);
             }
-
             if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
             {
                 anim.SetBool("IsWalk", false);
@@ -87,7 +86,6 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("IsWalk", false);
             }
         }
-
         #endregion MoveHorizontal
     }
 
@@ -110,6 +108,12 @@ public class PlayerController : MonoBehaviour
             {
                 anim.SetBool("IsJump", false);
             }
+
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                //weaponController.Shoot();
+                anim.SetTrigger("Attack");
+            }
         }
         else if (rb.name == "character1")
         {
@@ -127,6 +131,12 @@ public class PlayerController : MonoBehaviour
             else if (groundCheck.OnGround)
             {
                 anim.SetBool("IsJump", false);
+            }
+
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                //weaponController.Shoot();
+                anim.SetTrigger("Attack");
             }
         }
 
