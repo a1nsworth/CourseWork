@@ -35,9 +35,9 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    //TODO InputController
     void FixedUpdate()
-    {
+    {   
+        Debug.Log(groundCheck.OnGround);
         #region MoveHorizontal
         if (rb.name == "character2")
         {
@@ -46,12 +46,21 @@ public class PlayerController : MonoBehaviour
                 if (faceRight)
                     Reflect();
                 MoveHorizontal();
+
+                anim.SetBool("IsWalk", groundCheck.OnGround ? true : false);
             }
             if (Input.GetKey(KeyCode.RightArrow))
             {
                 if (!faceRight)
                     Reflect();
                 MoveHorizontal();
+
+                anim.SetBool("IsWalk", groundCheck.OnGround ? true : false);
+            }
+
+            if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
+            {
+                anim.SetBool("IsWalk", false);
             }
         }
         else if (rb.name == "character1")
@@ -61,16 +70,24 @@ public class PlayerController : MonoBehaviour
                 if (faceRight)
                     Reflect();
                 MoveHorizontal();
+
+                anim.SetBool("IsWalk", groundCheck.OnGround ? true : false);
             }
             if (Input.GetKey(KeyCode.D))
             {
                 if (!faceRight)
                     Reflect();
                 MoveHorizontal();
+
+                anim.SetBool("IsWalk", groundCheck.OnGround ? true : false);
+            }
+
+            if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+            {
+                anim.SetBool("IsWalk", false);
             }
         }
 
-        //anim.SetBool("IsWalk", stateHorizontal != 0 && groundCheck.OnGround ? true : false);
         #endregion MoveHorizontal
     }
 
@@ -80,22 +97,36 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.UpArrow) && groundCheck.OnGround)
             {
-                Debug.Log("InJ");
-                Jump();
-                groundCheck.OnGround = false;
-
                 anim.SetBool("IsJump", true);
+
+                groundCheck.OnGround = false;
+                Jump();
+            }
+            else if (!Input.GetKeyDown(KeyCode.UpArrow) && !groundCheck.OnGround)
+            {
+                anim.SetBool("IsJump", true);
+            }
+            else if (groundCheck.OnGround)
+            {
+                anim.SetBool("IsJump", false);
             }
         }
         else if (rb.name == "character1")
         {
             if (Input.GetKeyDown(KeyCode.W) && groundCheck.OnGround)
             {
-                Debug.Log("InJ");
-                Jump();
-                groundCheck.OnGround = false;
-
                 anim.SetBool("IsJump", true);
+
+                groundCheck.OnGround = false;
+                Jump();
+            }
+            else if (!Input.GetKeyDown(KeyCode.W) && !groundCheck.OnGround)
+            {
+                anim.SetBool("IsJump", true);
+            }
+            else if (groundCheck.OnGround)
+            {
+                anim.SetBool("IsJump", false);
             }
         }
 

@@ -7,7 +7,7 @@ public class GroundCheck : MonoBehaviour
     public float groundDistance = 0.1f;
     public bool OnGround { get; set; }
 
-    [SerializeField] private LayerMask layer;
+    [SerializeField] private LayerMask[] layer = new LayerMask[10];
 
     private RaycastHit2D hitInfo;
 
@@ -18,6 +18,6 @@ public class GroundCheck : MonoBehaviour
 
     private void FixedUpdate()
     {
-        OnGround = Physics2D.Raycast(transform.position, Vector3.down, groundDistance, layer);
+        OnGround = Physics2D.Raycast(transform.position, Vector3.down, groundDistance, layer[0]);
     }
 }
