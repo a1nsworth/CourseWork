@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private int damage;
-
+    [SerializeField] private GameObject hitEffect;
     private Rigidbody2D rb;
     void Start()
     {
@@ -15,7 +15,7 @@ public class Bullet : MonoBehaviour
         rb.velocity = transform.right * speed;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (Math.Abs(transform.position.x) > 10 || Math.Abs(transform.position.y) > 10)
         {
@@ -30,6 +30,8 @@ public class Bullet : MonoBehaviour
         {
             player.GetDamage(damage);
         }
+        Instantiate(hitEffect, transform.position, transform.rotation);
+
         Destroy(gameObject);
     }
 }

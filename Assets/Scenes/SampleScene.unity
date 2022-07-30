@@ -987,7 +987,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   validInputs: 6100000064000000770000007400000079000000
   speedX: 0.025
-  jumpForce: 270
+  jumpForce: 350
   groundCheck: {fileID: 1545385251}
   weaponController: {fileID: 0}
 --- !u!114 &1545385253
@@ -1003,7 +1003,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   basicHealth: 100
-  basicLifes: 1
+  basicLifes: 5
 --- !u!114 &1545385254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1209,7 +1209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   validInputs: 1401000013010000110100006e0000006d000000
   speedX: 0.025
-  jumpForce: 270
+  jumpForce: 350
   groundCheck: {fileID: 1546615265}
   weaponController: {fileID: 0}
 --- !u!114 &1546615272
@@ -1225,7 +1225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   basicHealth: 100
-  basicLifes: 1
+  basicLifes: 5
 --- !u!114 &1546615273
 MonoBehaviour:
   m_ObjectHideFlags: 0

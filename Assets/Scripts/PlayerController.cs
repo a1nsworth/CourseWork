@@ -100,10 +100,6 @@ public class PlayerController : MonoBehaviour
                 groundCheck.OnGround = false;
                 Jump();
             }
-            else if (!Input.GetKeyDown(KeyCode.UpArrow) && !groundCheck.OnGround)
-            {
-                anim.SetBool("IsJump", true);
-            }
             else if (groundCheck.OnGround)
             {
                 anim.SetBool("IsJump", false);
@@ -124,10 +120,6 @@ public class PlayerController : MonoBehaviour
                 groundCheck.OnGround = false;
                 Jump();
             }
-            else if (!Input.GetKeyDown(KeyCode.W) && !groundCheck.OnGround)
-            {
-                anim.SetBool("IsJump", true);
-            }
             else if (groundCheck.OnGround)
             {
                 anim.SetBool("IsJump", false);
@@ -139,15 +131,5 @@ public class PlayerController : MonoBehaviour
                 anim.SetTrigger("Attack");
             }
         }
-
-        // else if (!Input.GetKeyDown(KeyCode.W) && !groundCheck.OnGround)
-        // {
-        //     anim.SetBool("IsJump", true);
-        // }
-        // else if (groundCheck.OnGround)
-        // {
-        //     anim.SetBool("IsJump", false);
-        // }
-        // #endregion Jump
     }
 }
