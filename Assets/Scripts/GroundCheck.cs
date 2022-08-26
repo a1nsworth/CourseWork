@@ -19,5 +19,6 @@ public class GroundCheck : MonoBehaviour
     private void FixedUpdate()
     {
         OnGround = Physics2D.Raycast(transform.position, Vector3.down, groundDistance, layer[0]);
+        Debug.Log(OnGround);
     }
 }

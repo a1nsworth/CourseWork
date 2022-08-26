@@ -5,11 +5,15 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [field: SerializeField] public int BulletCost { get; private set; } = 10;
     [SerializeField] private float speed;
     [SerializeField] private int damage;
+
     [SerializeField] private GameObject hitEffect;
+
     private Rigidbody2D rb;
-    void Start()
+
+    private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = transform.right * speed;
@@ -18,9 +22,7 @@ public class Bullet : MonoBehaviour
     private void FixedUpdate()
     {
         if (Math.Abs(transform.position.x) > 10 || Math.Abs(transform.position.y) > 10)
-        {
             Destroy(gameObject);
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -30,6 +32,7 @@ public class Bullet : MonoBehaviour
         {
             player.GetDamage(damage);
         }
+
         Instantiate(hitEffect, transform.position, transform.rotation);
 
         Destroy(gameObject);

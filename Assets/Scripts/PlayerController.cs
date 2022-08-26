@@ -1,44 +1,35 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public List<KeyCode> validInputs;
-    public float speedX;
-    public float jumpForce;
-    private bool faceRight = true;
+    [SerializeField] private float speedX;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private List<KeyCode> validInputs;
+    [SerializeField] private float _attackDelay = 3f;
 
+    private bool faceRight = true;
+    private float nextAttackTime;
+
+    [SerializeField] private GroundCheck groundCheck;
     private Rigidbody2D rb;
     private Animator anim;
-    [SerializeField] private GroundCheck groundCheck;
-    [SerializeField] private WeaponController weaponController;
+    private Player player;
 
-    private void MoveHorizontal()
-    {
-        transform.Translate(speedX, 0, 0);
-    }
-    private void Reflect()
-    {
-        transform.Rotate(0, 180, 0);
-        faceRight = !faceRight;
-    }
-
-    private void Jump()
-    {
-        rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-    }
+    public event Action Shot;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        player = GetComponent<Player>();
     }
 
     void FixedUpdate()
     {
         #region MoveHorizontal
+
         if (rb.name == "character2")
         {
             if (Input.GetKey(KeyCode.LeftArrow))
@@ -47,16 +38,18 @@ public class PlayerController : MonoBehaviour
                     Reflect();
                 MoveHorizontal();
 
-                anim.SetBool("IsWalk", groundCheck.OnGround ? true : false);
+                anim.SetBool("IsWalk", groundCheck.OnGround);
             }
+
             if (Input.GetKey(KeyCode.RightArrow))
             {
                 if (!faceRight)
                     Reflect();
                 MoveHorizontal();
 
-                anim.SetBool("IsWalk", groundCheck.OnGround ? true : false);
+                anim.SetBool("IsWalk", groundCheck.OnGround);
             }
+
             if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
             {
                 anim.SetBool("IsWalk", false);
@@ -70,15 +63,16 @@ public class PlayerController : MonoBehaviour
                     Reflect();
                 MoveHorizontal();
 
-                anim.SetBool("IsWalk", groundCheck.OnGround ? true : false);
+                anim.SetBool("IsWalk", groundCheck.OnGround);
             }
+
             if (Input.GetKey(KeyCode.D))
             {
                 if (!faceRight)
                     Reflect();
                 MoveHorizontal();
 
-                anim.SetBool("IsWalk", groundCheck.OnGround ? true : false);
+                anim.SetBool("IsWalk", groundCheck.OnGround);
             }
 
             if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
@@ -86,6 +80,7 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("IsWalk", false);
             }
         }
+
         #endregion MoveHorizontal
     }
 
@@ -105,10 +100,12 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("IsJump", false);
             }
 
-            if (Input.GetKeyDown(KeyCode.N))
+            if (Input.GetKeyDown(KeyCode.N) && Time.time > nextAttackTime && player.IsPossibleToShot())
             {
-                //weaponController.Shoot();
                 anim.SetTrigger("Attack");
+                Shot?.Invoke();
+
+                nextAttackTime = Time.time + _attackDelay;
             }
         }
         else if (rb.name == "character1")
@@ -125,11 +122,22 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("IsJump", false);
             }
 
-            if (Input.GetKeyDown(KeyCode.T))
+            if (Input.GetKeyDown(KeyCode.T) && Time.time > nextAttackTime && player.IsPossibleToShot())
             {
-                //weaponController.Shoot();
                 anim.SetTrigger("Attack");
+                Shot?.Invoke();
+
+                nextAttackTime = Time.time + _attackDelay;
             }
         }
+    }
+
+    private void MoveHorizontal() => transform.Translate(speedX, 0, 0);
+    private void Jump() => rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+
+    private void Reflect()
+    {
+        transform.Rotate(0, 180, 0);
+        faceRight = !faceRight;
     }
 }

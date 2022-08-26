@@ -2,61 +2,117 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private int basicHealth;
-    [SerializeField] private int basicLifes;
-    public int Health { get; set; }
-    public int Lifes { get; set; }
+    public List<KeyCode> validInputs;
+    [field: SerializeField] public int Health { get; set; } = 100;
+    [field: SerializeField] public int Lifes { get; set; } = 1;
+    [field: SerializeField] public float Mana { get; set; } = 100;
+
+    [SerializeField] private int rangeX = 10;
+    [SerializeField] private int rangeY = 10;
+    [SerializeField] private float speedManaRegeneration = 1f;
+
+    [SerializeField] private Bullet bullet;
+    [SerializeField] private PlayerController playerController;
+
+    private int _basicHealth;
+    private int _basicLifes;
+    private float _basicMana;
 
     private Rigidbody2D rb;
     private Animator animator;
 
+    public event Action<int> Hit;
+    public event Action Died;
+    public event Action WastedLife;
+    public event Action<float> RegenerateMana;
+
+    private void Start()
+    {
+        _basicHealth = Health;
+        _basicLifes = Lifes;
+        _basicMana = Mana;
+
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+
+        playerController.Shot += OnShooted;
+
+        Hit += OnHit;
+        Died += OnDied;
+        WastedLife += OnWastedLife;
+        RegenerateMana += OnRegenerateMana;
+    }
+
+    private void Update()
+    {
+        if (IsPossibleToRegenerateMana())
+            RegenerateMana?.Invoke(speedManaRegeneration);
+
+        if (IsInRange(rangeX, rangeY))
+            Died?.Invoke();
+    }
 
     public void GetDamage(int damage)
     {
-        Health -= damage;
-        if (Health <= 0)
+        if (Health <= damage)
         {
             if (Lifes <= 1)
-            {
-                animator.SetTrigger("Die");
-            }
+                Died?.Invoke();
             else
-            {
-                Health = basicHealth;
-                Lifes--;
-            }
+                WastedLife?.Invoke();
         }
         else
         {
+            Hit?.Invoke(damage);
             animator.SetTrigger("Hurt");
         }
-
 
         Debug.Log(Health);
     }
 
-    private void Start()
-    {
-        Health = basicHealth;
-        Lifes = basicLifes;
+    public bool IsPossibleToShot() => Mana >= bullet.BulletCost;
+    public bool IsPossibleToRegenerateMana() => Mana < _basicMana;
 
-        animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
+    private bool IsInRange(int x, int y)
+    {
+        var position = transform.position;
+        return Math.Abs(position.x) > x && Math.Abs(position.y) > y;
     }
 
-    private void FixedUpdate()
+    private void OnHit(int damage) => Health -= damage;
+    private void OnShooted() => Mana -= bullet.BulletCost;
+    private void OnRegenerateMana(float speed) => Mana += Time.deltaTime * speed;
+
+    private void OnWastedLife()
     {
-        if (Math.Abs(transform.position.x) > 10 || Math.Abs(transform.position.y) > 10)
-        {
-            Die();
-        }
+        Health = _basicHealth;
+        Lifes--;
     }
 
-    public void Die()
+    public void OnDied()
     {
+        animator.SetTrigger("Die");
+
+        SelectWinner(gameObject);
         Destroy(gameObject);
+
+        Hit -= OnHit;
+        Died -= OnDied;
+        WastedLife -= OnWastedLife;
+        RegenerateMana -= OnRegenerateMana;
+    }
+
+    private void SelectWinner(GameObject gameObject)
+    {
+        if (gameObject.name == "character1")
+            EndBar.victoryState = EndBar.VictoryState.Player2;
+        else if (gameObject.name == "character2")
+            EndBar.victoryState = EndBar.VictoryState.Player1;
+
+        EndGameController.OnEndGame();
     }
 }
