@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public List<KeyCode> validInputs;
     [field: SerializeField] public int Health { get; set; } = 100;
     [field: SerializeField] public int Lifes { get; set; } = 1;
     [field: SerializeField] public float Mana { get; set; } = 100;
@@ -39,12 +38,12 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
 
-        playerController.Shot += OnShooted;
-
         Hit += OnHit;
         Died += OnDied;
         WastedLife += OnWastedLife;
         RegenerateMana += OnRegenerateMana;
+
+        playerController.Shot += OnShooted;
     }
 
     private void Update()
@@ -75,7 +74,7 @@ public class Player : MonoBehaviour
     }
 
     public bool IsPossibleToShot() => Mana >= bullet.BulletCost;
-    public bool IsPossibleToRegenerateMana() => Mana < _basicMana;
+    private bool IsPossibleToRegenerateMana() => Mana < _basicMana;
 
     private bool IsInRange(int x, int y)
     {

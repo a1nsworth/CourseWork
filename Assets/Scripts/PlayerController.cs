@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [field: SerializeField] private KeyCode ForwardKey { get; set; }
+    [field: SerializeField] private KeyCode BackwardKey { get; set; }
+    [field: SerializeField] private KeyCode JumpKey { get; set; }
+    [field: SerializeField] private KeyCode AttackKey { get; set; }
+    [field: SerializeField] private KeyCode JumpDownKey { get; set; }
+    [field: SerializeField] private KeyCode SupperAttackKey { get; set; }
+
     [SerializeField] private float speedX;
     [SerializeField] private float jumpForce;
-    [SerializeField] private List<KeyCode> validInputs;
     [SerializeField] private float _attackDelay = 3f;
 
     private bool faceRight = true;
@@ -32,7 +38,7 @@ public class PlayerController : MonoBehaviour
 
         if (rb.name == "character2")
         {
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(BackwardKey))
             {
                 if (faceRight)
                     Reflect();
@@ -41,7 +47,7 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("IsWalk", groundCheck.OnGround);
             }
 
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey(ForwardKey))
             {
                 if (!faceRight)
                     Reflect();
@@ -50,14 +56,14 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("IsWalk", groundCheck.OnGround);
             }
 
-            if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
+            if (!Input.GetKey(BackwardKey) && !Input.GetKey(ForwardKey))
             {
                 anim.SetBool("IsWalk", false);
             }
         }
         else if (rb.name == "character1")
         {
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(BackwardKey))
             {
                 if (faceRight)
                     Reflect();
@@ -66,7 +72,7 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("IsWalk", groundCheck.OnGround);
             }
 
-            if (Input.GetKey(KeyCode.D))
+            if (Input.GetKey(ForwardKey))
             {
                 if (!faceRight)
                     Reflect();
@@ -75,7 +81,7 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("IsWalk", groundCheck.OnGround);
             }
 
-            if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+            if (!Input.GetKey(BackwardKey) && !Input.GetKey(ForwardKey))
             {
                 anim.SetBool("IsWalk", false);
             }
@@ -88,7 +94,7 @@ public class PlayerController : MonoBehaviour
     {
         if (rb.name == "character2")
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow) && groundCheck.OnGround)
+            if (Input.GetKeyDown(JumpKey) && groundCheck.OnGround)
             {
                 anim.SetBool("IsJump", true);
 
@@ -100,7 +106,7 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("IsJump", false);
             }
 
-            if (Input.GetKeyDown(KeyCode.N) && Time.time > nextAttackTime && player.IsPossibleToShot())
+            if (Input.GetKeyDown(AttackKey) && Time.time > nextAttackTime && player.IsPossibleToShot())
             {
                 anim.SetTrigger("Attack");
                 Shot?.Invoke();
@@ -110,7 +116,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (rb.name == "character1")
         {
-            if (Input.GetKeyDown(KeyCode.W) && groundCheck.OnGround)
+            if (Input.GetKeyDown(JumpKey) && groundCheck.OnGround)
             {
                 anim.SetBool("IsJump", true);
 
@@ -122,7 +128,7 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("IsJump", false);
             }
 
-            if (Input.GetKeyDown(KeyCode.T) && Time.time > nextAttackTime && player.IsPossibleToShot())
+            if (Input.GetKeyDown(AttackKey) && Time.time > nextAttackTime && player.IsPossibleToShot())
             {
                 anim.SetTrigger("Attack");
                 Shot?.Invoke();

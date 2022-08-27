@@ -8,6 +8,8 @@ public class Bullet : MonoBehaviour
     [field: SerializeField] public int BulletCost { get; private set; } = 10;
     [SerializeField] private float speed;
     [SerializeField] private int damage;
+    [SerializeField] private int rangeX = 10;
+    [SerializeField] private int rangeY = 10;
 
     [SerializeField] private GameObject hitEffect;
 
@@ -21,8 +23,14 @@ public class Bullet : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Math.Abs(transform.position.x) > 10 || Math.Abs(transform.position.y) > 10)
+        if (IsInRange(rangeX, rangeY))
             Destroy(gameObject);
+    }
+
+    private bool IsInRange(int x, int y)
+    {
+        var position = transform.position;
+        return Math.Abs(position.x) > x && Math.Abs(position.y) > y;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -33,7 +41,8 @@ public class Bullet : MonoBehaviour
             player.GetDamage(damage);
         }
 
-        Instantiate(hitEffect, transform.position, transform.rotation);
+        var transform1 = transform;
+        Instantiate(hitEffect, transform1.position, transform1.rotation);
 
         Destroy(gameObject);
     }
