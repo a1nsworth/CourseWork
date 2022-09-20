@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 public class WeaponController : MonoBehaviour
 {
     [SerializeField] private GameObject prefabBullet;
+    [SerializeField] private GameObject prefabSuperBullet;
     [SerializeField] private Transform firePoint;
 
     private event Action ShotBehavior;
@@ -16,5 +17,12 @@ public class WeaponController : MonoBehaviour
         ShotBehavior?.Invoke();
 
         Instantiate(prefabBullet, firePoint.position, firePoint.rotation);
+    }
+
+    public void SupperShoot()
+    {
+        ShotBehavior?.Invoke();
+
+        Instantiate(prefabSuperBullet, firePoint.position, firePoint.rotation);
     }
 }

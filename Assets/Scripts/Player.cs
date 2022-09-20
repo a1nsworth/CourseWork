@@ -10,16 +10,17 @@ public class Player : MonoBehaviour
     [field: SerializeField] public int Lifes { get; set; } = 1;
     [field: SerializeField] public float Mana { get; set; } = 100;
 
-    [SerializeField] private int rangeX = 10;
-    [SerializeField] private int rangeY = 10;
     [SerializeField] private float speedManaRegeneration = 1f;
 
     [SerializeField] private Bullet bullet;
+    [SerializeField] private Bullet supperBullet;
     [SerializeField] private PlayerController playerController;
 
     private int _basicHealth;
     private int _basicLifes;
     private float _basicMana;
+
+    private readonly int _rangeY = -10;
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -28,6 +29,9 @@ public class Player : MonoBehaviour
     public event Action Died;
     public event Action WastedLife;
     public event Action<float> RegenerateMana;
+    public event Action BonusHP;
+    public event Action BonusMana;
+    public event Action BonusLife;
 
     private void Start()
     {
@@ -43,7 +47,8 @@ public class Player : MonoBehaviour
         WastedLife += OnWastedLife;
         RegenerateMana += OnRegenerateMana;
 
-        playerController.Shot += OnShooted;
+        playerController.BasicShot += OnSimpeShooted;
+        playerController.SupperShot += OnSupperShooted;
     }
 
     private void Update()
@@ -51,7 +56,7 @@ public class Player : MonoBehaviour
         if (IsPossibleToRegenerateMana())
             RegenerateMana?.Invoke(speedManaRegeneration);
 
-        if (IsInRange(rangeX, rangeY))
+        if (IsInRange())
             Died?.Invoke();
     }
 
@@ -73,17 +78,19 @@ public class Player : MonoBehaviour
         Debug.Log(Health);
     }
 
-    public bool IsPossibleToShot() => Mana >= bullet.BulletCost;
-    private bool IsPossibleToRegenerateMana() => Mana < _basicMana;
+    public bool IsPossibleToBasicShot() => Mana >= bullet.BulletCost;
+    public bool IsPossibleToSupperShot() => Mana >= supperBullet.BulletCost;
+    public bool IsPossibleToRegenerateMana() => Mana < _basicMana;
 
-    private bool IsInRange(int x, int y)
+    private bool IsInRange()
     {
         var position = transform.position;
-        return Math.Abs(position.x) > x && Math.Abs(position.y) > y;
+        return position.y < _rangeY;
     }
 
     private void OnHit(int damage) => Health -= damage;
-    private void OnShooted() => Mana -= bullet.BulletCost;
+    private void OnSimpeShooted() => Mana -= bullet.BulletCost;
+    private void OnSupperShooted() => Mana -= supperBullet.BulletCost;
     private void OnRegenerateMana(float speed) => Mana += Time.deltaTime * speed;
 
     private void OnWastedLife()
@@ -113,5 +120,23 @@ public class Player : MonoBehaviour
             EndBar.victoryState = EndBar.VictoryState.Player1;
 
         EndGameController.OnEndGame();
+    }
+
+    public void GenerateFullHP()
+    {
+        Health = _basicHealth;
+        BonusHP?.Invoke();
+    }
+
+    public void GenerateFullMana()
+    {
+        Mana = _basicMana;
+        BonusMana?.Invoke();
+    }
+
+    public void LifeBoost()
+    {
+        Lifes++;
+        BonusLife?.Invoke();
     }
 }

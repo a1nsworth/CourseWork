@@ -12,6 +12,12 @@ public class EndBar : MonoBehaviour
         Player2
     }
 
+    private enum StateTime
+    {
+        Stop,
+        Run
+    }
+
     [SerializeField] private GameObject endGameUI;
     [SerializeField] private Text player1Win;
     [SerializeField] private Text player2Win;
@@ -23,6 +29,9 @@ public class EndBar : MonoBehaviour
         EndGameController.EndGame += OnEndGame;
     }
 
+    private void StopTime() => Time.timeScale = (float)StateTime.Stop;
+
+
     private void OnEndGame()
     {
         endGameUI.SetActive(true);
@@ -31,6 +40,8 @@ public class EndBar : MonoBehaviour
             player1Win.gameObject.SetActive(true);
         else if (victoryState == VictoryState.Player2)
             player2Win.gameObject.SetActive(true);
+
+        StopTime();
 
         EndGameController.EndGame -= OnEndGame;
     }

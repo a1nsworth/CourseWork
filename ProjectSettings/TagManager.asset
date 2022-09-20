@@ -16,8 +16,8 @@ TagManager:
   - Ground
   - Character
   - Bullet
-  - 
-  - 
+  - Treasure
+  - Pause
   - 
   - 
   - 
@@ -54,4 +54,7 @@ TagManager:
     locked: 0
   - name: Bullet
     uniqueID: 2008098055
+    locked: 0
+  - name: Treasure
+    uniqueID: 2301182699
     locked: 0

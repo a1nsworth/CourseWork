@@ -8,10 +8,9 @@ public class PlayerController : MonoBehaviour
     [field: SerializeField] private KeyCode BackwardKey { get; set; }
     [field: SerializeField] private KeyCode JumpKey { get; set; }
     [field: SerializeField] private KeyCode AttackKey { get; set; }
-    [field: SerializeField] private KeyCode JumpDownKey { get; set; }
     [field: SerializeField] private KeyCode SupperAttackKey { get; set; }
 
-    [SerializeField] private float speedX;
+    [SerializeField] public float speedX;
     [SerializeField] private float jumpForce;
     [SerializeField] private float _attackDelay = 3f;
 
@@ -19,20 +18,22 @@ public class PlayerController : MonoBehaviour
     private float nextAttackTime;
 
     [SerializeField] private GroundCheck groundCheck;
+    
     private Rigidbody2D rb;
     private Animator anim;
     private Player player;
 
-    public event Action Shot;
+    public event Action BasicShot;
+    public event Action SupperShot;
 
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         player = GetComponent<Player>();
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         #region MoveHorizontal
 
@@ -90,7 +91,7 @@ public class PlayerController : MonoBehaviour
         #endregion MoveHorizontal
     }
 
-    void Update()
+    private void Update()
     {
         if (rb.name == "character2")
         {
@@ -106,12 +107,18 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("IsJump", false);
             }
 
-            if (Input.GetKeyDown(AttackKey) && Time.time > nextAttackTime && player.IsPossibleToShot())
+            if (Input.GetKeyDown(AttackKey) && Time.time > nextAttackTime && player.IsPossibleToBasicShot())
             {
                 anim.SetTrigger("Attack");
-                Shot?.Invoke();
+                BasicShot?.Invoke();
 
                 nextAttackTime = Time.time + _attackDelay;
+            }
+
+            if (Input.GetKeyDown(SupperAttackKey) && player.IsPossibleToSupperShot())
+            {
+                anim.SetTrigger("SupperAttack");
+                SupperShot?.Invoke();
             }
         }
         else if (rb.name == "character1")
@@ -128,18 +135,26 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("IsJump", false);
             }
 
-            if (Input.GetKeyDown(AttackKey) && Time.time > nextAttackTime && player.IsPossibleToShot())
+            if (Input.GetKeyDown(AttackKey) && Time.time > nextAttackTime && player.IsPossibleToBasicShot())
             {
                 anim.SetTrigger("Attack");
-                Shot?.Invoke();
+                BasicShot?.Invoke();
 
                 nextAttackTime = Time.time + _attackDelay;
+            }
+
+            if (Input.GetKeyDown(SupperAttackKey) && player.IsPossibleToSupperShot())
+            {
+                anim.SetTrigger("SupperAttack");
+                SupperShot?.Invoke();
             }
         }
     }
 
     private void MoveHorizontal() => transform.Translate(speedX, 0, 0);
     private void Jump() => rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+
+    public void OnSpeedBonus() => speedX += 0.01f;
 
     private void Reflect()
     {

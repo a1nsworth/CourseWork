@@ -6,6 +6,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [field: SerializeField] public int BulletCost { get; private set; } = 10;
+        
     [SerializeField] private float speed;
     [SerializeField] private int damage;
     [SerializeField] private int rangeX = 10;

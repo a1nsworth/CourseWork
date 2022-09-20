@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UICharacterController : MonoBehaviour
 {
@@ -16,6 +14,7 @@ public class UICharacterController : MonoBehaviour
 
     [SerializeField] private Player player;
     [SerializeField] private Bullet bullet;
+    [SerializeField] private Bullet supperBullet;
     [SerializeField] private PlayerController playerController;
 
     public float Health
@@ -52,13 +51,22 @@ public class UICharacterController : MonoBehaviour
         player.Died += OnDied;
         player.WastedLife += OnWastedLife;
         player.RegenerateMana += OnRegenerateMana;
+        player.BonusHP += OnGeneratedFullHP;
+        player.BonusMana += OnGeneratedFullMana;
+        player.BonusLife += OnBoostedLife;
 
-        playerController.Shot += OnShooted;
+        playerController.BasicShot += OnSimpleShooted;
+        playerController.SupperShot += OnSupperShooted;
     }
 
     private void OnHit(int damage) => Health -= damage;
-    private void OnShooted() => Mana -= bullet.BulletCost;
+    private void OnSimpleShooted() => Mana -= bullet.BulletCost;
+    private void OnSupperShooted() => Mana -= supperBullet.BulletCost;
     private void OnRegenerateMana(float speed) => Mana += Time.deltaTime * speed;
+
+    private void OnGeneratedFullHP() => Health = healthSlider.maxValue;
+    private void OnGeneratedFullMana() => Mana = manaSlider.maxValue;
+    private void OnBoostedLife() => Life = (Convert.ToInt32(lifes.text) + 1).ToString();
 
     private void OnDied()
     {
@@ -72,11 +80,14 @@ public class UICharacterController : MonoBehaviour
         player.Died -= OnDied;
         player.WastedLife -= OnWastedLife;
         player.RegenerateMana -= OnRegenerateMana;
+        player.BonusHP -= OnGeneratedFullHP;
+        player.BonusMana -= OnGeneratedFullMana;
+        player.BonusLife -= OnBoostedLife;
     }
 
     private void OnWastedLife()
     {
         healthSlider.value = healthSlider.maxValue;
-        lifes.text = (Convert.ToInt32(lifes.text) - 1).ToString();
+        Life = (Convert.ToInt32(lifes.text) - 1).ToString();
     }
 }
